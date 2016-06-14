@@ -1,7 +1,11 @@
+DROP DATABASE IF EXISTS siga;
+CREATE DATABASE IF NOT EXISTS siga;
+USE siga;
+
 -- ----------------------------------------------------------------------------
--- 01 Pessoa
+-- Pessoa
 -- Criado por: Grupo 6A
--- Também precisa popular as tabelas Endereço e E-mail
+-- Tambem precisa popular as tabelas Endereço e E-mail
 
 DROP TABLE IF EXISTS tbl_pessoa;
 CREATE TABLE IF NOT EXISTS tbl_pessoa
@@ -52,7 +56,7 @@ CREATE TABLE IF NOT EXISTS tbl_endereco
   ); 
 
 
-INSERT INTO tbl_pessoa (pessoa_id, prenome, sobrenome, raça, sexo, cidade_nasc, pais_nasc, UF_nasc, data_nasc, pai_filiacao, mae_filiacao)
+INSERT INTO tbl_pessoa (pessoa_id, prenome, sobrenome, raca, sexo, cidade_nasc, pais_nasc, UF_nasc, data_nasc, pai_filiacao, mae_filiacao)
 VALUES
 
 -- Docentes
@@ -60,7 +64,7 @@ VALUES
 ('40078919665', 'Raimundo', 'Carvalho', 'Branca', 'Masculino', 'Pirapora do Bom Jesus', 'Brasil', 'SP', '1989-09-24', 'Joselyto Carvalho', 'Maria Castelo'),
 ('72003800670', 'Alice', 'Moreira', 'Branca', 'Feminino', 'São Paulo', 'Brasil', 'SP', '1992-01-23', 'Fernando Moreira', 'Ana Santos'),
 ('72799547230', 'Roberta', 'Schmitt', 'Branca', 'Feminino', 'Belo Horizonte', 'Brasil', 'MG', '1988-04-04', 'José Schmitt', 'Carla Pereira'),
-('11104385910', 'Legolas', 'Silva', 'Elfo', 'Masculino', 'Terra Média', 'Brasil', 'AC', '1991-02-30', 'Sívio Silva', 'Sílva Silva'),
+('11104385910', 'Legolas', 'Silva', 'Elfo', 'Masculino', 'Terra Média', 'Brasil', 'AC', '1991-02-28', 'Sívio Silva', 'Sílva Silva'),
 
 -- Estudantes
 ('90778718530', 'Estudante1', 'Schmitt', 'Branca', 'Feminino', 'Belo Horizonte', 'Brasil', 'MG', '1988-04-04', 'José Schmitt', 'Carla Pereira'),
@@ -72,7 +76,7 @@ VALUES
 
 
 -- ----------------------------------------------------------------------------
--- 02 Docente
+-- Docente
 -- Criado por: Grupo 6A
 -- Modificar os outros campos, mas manter os CPFs!
 
@@ -111,7 +115,7 @@ INSERT INTO tbl_docente (pessoa, titularidade, alivio_integral) VALUES
 
 
 -- ----------------------------------------------------------------------------
--- 03 Membro
+-- Membro
 -- Criado por: Wellyson (4A)
 -- membro(PK(FK_Docente(pessoa)), categoria, data_eleicao, periodo_inicio, periodo_fim) está na 3FN porque:
 -- Está na 1FN: porque todos os atributos são atômicos (o atributo composto “período” foi dividido em “período_inicio” e “periodo_fim”);
@@ -132,7 +136,7 @@ CREATE TABLE tbl_membro
 
 
 -- ----------------------------------------------------------------------------
--- 04 Reunião
+-- Reunião
 -- Criado por: André Rocha (4A)
 
 DROP TABLE IF EXISTS tbl_reuniao;
@@ -145,7 +149,7 @@ CREATE TABLE tbl_reuniao
 
 
 -- ----------------------------------------------------------------------------
--- 05 Ata
+-- Ata
 -- Criado por: Wellyson (4A)
 -- ata(PK(FK_Reuniao(numero)), decisoes, pauta, topicos, resumo) está na 3FN:
 -- Está na 1FN: porque todos os atributos são atômicos;
@@ -165,7 +169,7 @@ CREATE TABLE tbl_ata
   ); 
 
 -- ----------------------------------------------------------------------------
--- 06 Contribuição
+-- Contribuição
 -- Criado por: Lucas Bataglia (4A)
 -- Contribuição(PK(FK_Membro(id), FK_ata(numero_reuniao)) está na 3FN:
 -- Está na 1FN: porque todos os atributos são atômicos;
@@ -186,7 +190,7 @@ CREATE TABLE tbl_ata
 
 
 -- ----------------------------------------------------------------------------
--- 07 Participa
+-- Participa
 -- Criado por: Lucas Bataglia (4A)
 -- Participa ( PK(FK_Membro(cpf), FK_reuniao(numero_reuniao))) está na 3FN:
 -- Está na 1FN: porque todos os atributos são atômicos;
@@ -205,7 +209,7 @@ CREATE TABLE tbl_participa
 
 
 -- ----------------------------------------------------------------------------
--- 08 Estudante
+-- Estudante
 -- Criado por: Pedro Padoveze
 
 DROP TABLE IF EXISTS tbl_estudante;
@@ -228,22 +232,8 @@ INSERT INTO tbl_estudante (ra, ensino_medio, ano_conclusao, pessoa_id) VALUES
 (123456, "Colegio ABC", 2005, '77426047792');
 
 
-DROP view IF EXISTS v_estudante;
-CREATE OR replace VIEW v_estudante
-AS
-  SELECT pessoa_id,
-         tbl_estudante.ra,
-         sigla,
-         ano_ingresso,
-         ira
-  FROM   tbl_estudante,
-         tbl_matricula
-  WHERE  tbl_estudante.ra = tbl_matricula.ra
-  GROUP  BY pessoa_id; 
-
-
 -- ----------------------------------------------------------------------------
--- 09 Atividade Complementar
+-- Atividade Complementar
 -- Criado por: Rodrigo Teixeira Garcia (5A)
 
 DROP TABLE IF EXISTS  tbl_atividade_complementar;
@@ -287,7 +277,7 @@ INSERT INTO tbl_atividade_complementar(tipo, descricao, carga_horaria, id, ra_at
 
 
 -- ----------------------------------------------------------------------------
--- 10 Departamento
+-- Departamento
 -- Criado por: Rodrigo Teixeira Garcia (5A)
 
 DROP TABLE IF EXISTS  tbl_departamento;
@@ -315,7 +305,7 @@ AS
 DROP view IF EXISTS v_departamentos;
 CREATE OR REPLACE view v_departamentos
 AS
-  SELECT nome, campi, silga, centro
+  SELECT nome, campi, sigla, centro
   FROM   tbl_departamento;
   
 
@@ -328,7 +318,7 @@ INSERT INTO tbl_departamento(centro, campi, nome, sigla) VALUES
 
 
 -- ----------------------------------------------------------------------------
--- 11 Disciplina
+-- Disciplina
 -- Criado por: Vitor Rocha (5A)
 
 DROP TABLE IF EXISTS tbl_disciplina;
@@ -355,7 +345,7 @@ INSERT INTO tbl_Disciplina (codigo, nome, ementa, creditosTeoricos, creditosPrat
 
 
 -- ----------------------------------------------------------------------------
--- 12 Técnico Administrativo
+-- Técnico Administrativo
 -- Criado por: Guilherme Lemos (4A)
 -- TecnicoAdministrativo(PK(FK_Pessoa(id))) está na 3FN:
 -- Está na 1FN: porque todos os atributos são atômicos;
@@ -374,9 +364,42 @@ CREATE TABLE tbl_tecnico_administrativo
 INSERT INTO tbl_Tecnico_Administrativo(id) VALUES
 ('24174616256');
 
+-- ----------------------------------------------------------------------------
+-- Calendario
+-- Criado por: Grupo 6A
+
+DROP TABLE IF EXISTS tbl_calendario;
+CREATE TABLE IF NOT EXISTS tbl_calendario (
+    ano INT NOT NULL,
+    semestre INT NOT NULL,
+    tipo VARCHAR(10),
+    data_ini DATE,
+    data_ter DATE,
+    CONSTRAINT pk_calendario PRIMARY KEY (ano , semestre)
+); 
+
+
+DROP VIEW IF EXISTS `v_calendario`;
+CREATE VIEW v_calendario AS
+    SELECT 
+        tbl_calendario.ano AS ano,
+        tbl_calendario.semestre AS semestre,
+        DATE_FORMAT(tbl_calendario.data_ini, '%d-%c-%Y') AS data_ini,
+        DATE_FORMAT(tbl_calendario.data_ter, '%d-%c-%Y') AS data_ter
+    FROM
+        tbl_calendario; 
+
+
+INSERT INTO tbl_calendario(ano, semestre, tipo, data_ini, data_ter) VALUES
+(2016, 1, "Acadêmico", '2016-02-01', '2016-07-30'), 
+(2016, 2, "Acadêmico", '2016-08-01', '2016-12-15'), 
+(2017, 1, "Acadêmico", '2017-02-01', '2017-07-30'), 
+(2017, 2, "Acadêmico", '2017-08-01', '2017-12-15'), 
+(2018, 1, "Acadêmico", '2018-02-01', '2018-07-30');
+
 
 -- ----------------------------------------------------------------------------
--- 13 Turma
+-- Turma
 -- Criado por: Vitor Rocha (5A)
 
 DROP TABLE IF EXISTS tbl_turma;
@@ -403,7 +426,7 @@ INSERT INTO tbl_turma (semestre, ano, codigoTurma, codigoDisciplina, numeroDeVag
 
 
 -- ----------------------------------------------------------------------------
--- 14 Conselho
+-- Conselho
 -- Criado por: Guilherme Lemos (4A)
 -- Conselho(PK(DataInicioVigencia,DataFimVigencia), sigla, tipo) está na 3FN:
 -- Está na 1FN: porque todos os atributos são atômicos, já que o atributo PeríodoVigencia foi separado em dataInicioVigencia e dataFimVigencia;
@@ -427,7 +450,7 @@ INSERT INTO tbl_Conselho (sigla, tipo, dataInicioVigencia, dataFimVigencia) VALU
 
 
 -- ----------------------------------------------------------------------------
--- 15 Estágio
+-- Estágio
 -- Criado por: Julio Batista (5A)
 
 DROP TABLE IF EXISTS tbl_estagio;
@@ -483,7 +506,7 @@ INSERT INTO tbl_estagio (pais_atuacao, termo_compromisso, carta_avaliacao, super
 
 
 -- ----------------------------------------------------------------------------
--- 16 Curso
+-- Curso
 -- Criado por: Eduardo Marinho (5A)
 
 DROP TABLE IF EXISTS  tbl_curso;
@@ -511,7 +534,7 @@ INSERT INTO tbl_Curso (sigla, nome, duracaomedia, duracaomaxima, PPPaprovado, ce
 
 
 -- ----------------------------------------------------------------------------
--- 17 Matricula
+-- Matricula
 -- Criado por: Pedro Padoveze (5A)
 
 DROP TABLE IF EXISTS  tbl_matricula;
@@ -540,7 +563,7 @@ INSERT INTO tbl_Matricula (sigla, ra, ira, creditos_obrigatorios, creditos_optat
 
 
 -- ----------------------------------------------------------------------------
--- 18 Pré-Requisito
+-- Pré-Requisito
 -- Criado por: Vitor Rocha (5A)
 
 DROP TABLE IF EXISTS tbl_pre_requisito;
@@ -560,7 +583,7 @@ INSERT INTO tbl_Pre_Requisito (disciplina, preRequisito) VALUES
 
 
 -- ----------------------------------------------------------------------------
--- 19 Grade
+-- Grade
 -- Criado por: Eduardo Marinho (5A)
 
 DROP TABLE IF EXISTS tbl_grade;
@@ -586,7 +609,7 @@ INSERT INTO tbl_Grade (perfil, tipo, sigla, codigo)	VALUES
 
 
 -- ----------------------------------------------------------------------------
--- 20 Prédio
+-- Prédio
 -- Criado por: Grupo 6A
 
 DROP TABLE IF EXISTS tbl_predio;
@@ -603,13 +626,13 @@ CREATE TABLE IF NOT EXISTS tbl_predio (
 
 
 INSERT INTO tbl_predio VALUES
-('AT-1','', 'http://www2.ufscar.br/servicos/img_ru.jpg', '','',3,17);
-('AT-2','', 'http://www2.ufscar.br/uploads/44445_portal_sao_carlos_norte_atual_3609123126331919332.jpg', '','',26,44);
+('AT-1','', 'http://www2.ufscar.br/servicos/img_ru.jpg', '','',3,17),
+('AT-2','', 'http://www2.ufscar.br/uploads/44445_portal_sao_carlos_norte_atual_3609123126331919332.jpg', '','',26,44),
 ('AT-4','', 'http://www2.ufscar.br/vidaacademica/img_cienciaexata.jpg', '','',67,91);
 
 
 -- ----------------------------------------------------------------------------
--- 21 Sala
+-- Sala
 -- Criado por: Grupo 6A
 
 DROP TABLE IF EXISTS tbl_sala;
@@ -653,7 +676,7 @@ INSERT INTO tbl_sala (numero,predio,tipo,recursos,caracteristicas,capacidade_de_
  
 
 -- ----------------------------------------------------------------------------
--- 22 Alocação
+-- Alocação
 -- Criado por: Grupo 5A
 
 DROP TABLE IF EXISTS tbl_alocacao;
@@ -673,7 +696,7 @@ CREATE TABLE IF NOT EXISTS tbl_Alocacao (
 
 
 -- ----------------------------------------------------------------------------
--- 23 Inscrição
+-- Inscrição
 -- Criado por: Grupo 5A
 
 DROP TABLE IF EXISTS tbl_inscricao;
@@ -697,7 +720,7 @@ CREATE TABLE IF NOT EXISTS tbl_Inscricao (
 
 
 -- ----------------------------------------------------------------------------
--- 24 Atividade
+-- Atividade
 -- Criado por: Grupo 6A
 
 DROP TABLE IF EXISTS tbl_atividade;
@@ -711,15 +734,15 @@ CREATE TABLE IF NOT EXISTS tbl_atividade (
 );
 
 INSERT INTO tbl_atividade VALUES
-('2016-05-24','2016-06-24', 'Paralisação temporária', 'DCE', 20);
-('2016-02-29','2016-04-14', 'Período para substituição do conceito R', 'Docentes', 5);
-('2016-02-29','2016-05-09', 'Período para cancelamento de disciplina', 'Estudantes', 10);
-('2016-07-22','2016-07-25', 'Período de inscricao nas disciplinas para o segundo período letivo', 'Estudantes', 10);
+('2016-05-24','2016-06-24', 'Paralisação temporária', 'DCE', 20),
+('2016-02-29','2016-04-14', 'Período para substituição do conceito R', 'Docentes', 5),
+('2016-02-29','2016-05-09', 'Período para cancelamento de disciplina', 'Estudantes', 10),
+('2016-07-22','2016-07-25', 'Período de inscricao nas disciplinas para o segundo período letivo', 'Estudantes', 10),
 ('2016-10-24','2016-10-28', 'Jornada Científica', 'Estudantes', 10);
 
 
 -- ----------------------------------------------------------------------------
--- 25 Proposta Intermediária
+-- Proposta Intermediária
 -- Criado por: Grupo 6A
 
 DROP TABLE IF EXISTS tbl_proposta_int;
@@ -741,7 +764,7 @@ INSERT INTO tbl_proposta_int(ano, semestre, data_submissao) VALUES
 
 
 -- ----------------------------------------------------------------------------
--- 26 [REVISAR] Plano de Ensino
+-- [REVISAR] Plano de Ensino
 -- Criado por: André Rocha (4A)
 
 /*
@@ -777,7 +800,7 @@ CREATE TABLE tbl_plano_de_ensino (
 */
 
 -- ----------------------------------------------------------------------------
--- 27 [REVISAR] Código Turma
+-- [REVISAR] Código Turma
 -- Criado por: André Rocha (4A)
 
 /*
@@ -793,3 +816,23 @@ CREATE TABLE tbl_codigo_turma (
     CONSTRAINT codigoTurma_pk PRIMARY KEY (id)
 );
 */
+
+-- ----------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
+
+-- Estudante Views
+DROP view IF EXISTS v_estudante;
+CREATE OR replace VIEW v_estudante
+AS
+  SELECT pessoa_id,
+         tbl_estudante.ra,
+         sigla,
+         ano_ingresso,
+         ira
+  FROM   tbl_estudante,
+         tbl_matricula
+  WHERE  tbl_estudante.ra = tbl_matricula.ra
+  GROUP  BY pessoa_id; 
