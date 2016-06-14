@@ -481,6 +481,7 @@ AS
   FROM   tbl_estagio
   GROUP  BY pais_atuacao;
 
+
 -- View que mostra quantos estudantes estão atualmente empregados em cada empresa
 DROP view IF EXISTS v_estagio_empresas;
 CREATE OR REPLACE view v_estagio_empresas
@@ -492,17 +493,35 @@ AS
   GROUP  BY empresa; 
 
 
+-- View que mostra onde e quando cada aluno (exibido por nome) fez o estágio obrigatório
+DROP view IF EXISTS v_estagio_obrigatorio;
+
+CREATE OR REPLACE view v_estagio_obrigatorio
+AS
+  SELECT p.prenome      AS prenome,
+         p.sobrenome    AS sobrenome,
+         e.empresa      AS empresa,
+         e.data_inicio  AS inicio,
+         e.data_termino AS termino
+  FROM   tbl_estagio AS e,
+         tbl_estudante AS a,
+         tbl_pessoa AS p
+  WHERE  e.obrigatorio = 1
+         AND e.estudante_ra = a.ra
+         AND a.pessoa_id = p.pessoa_id; 
+
+
 INSERT INTO tbl_estagio (pais_atuacao, termo_compromisso, carta_avaliacao, supervisor_empresa, empresa, obrigatorio, data_termino, data_inicio, estudante_ra, supervisor_id) VALUES
-('BRA', 'Texto do termo de compromisso da EMBRAER', 'Carta de avaliação do 334578', 'Mauro Kern',            'EMBRAER',  '1',    '2016-06-30', '2016-01-01', '334578', '24174616256'),
-('BRA', 'Texto do termo de compromisso da Oracle', 'Carta de avaliação do 123456', 'Larry Ellison',         'Oracle',   '1',    '2013-06-30', '2013-01-01', '123456', '24174616256'),
-('FIN', 'Texto do termo de compromisso da Nokia', 'Carta de avaliação do 123456', 'Rich Green',            'Nokia',    '0',    '2014-12-31', '2014-07-01', '123456', '24174616256'),
-('USA', 'Texto do termo de compromisso da IBM', 'Carta de avaliação do 123456', 'Mark Dean',    'IBM',      '0',    '2015-03-31', '2015-01-01', '123456', '11104385910'),
-('KOR', 'Texto do termo de compromisso da Samsung', 'Carta de avaliação do 123456', 'Omar Khan',             'Samsung',  '0',    '2016-06-30', '2016-01-01', '123456', '24174616256'),
-('SWE', 'Texto do termo de compromisso da Ericsson', 'Carta de avaliação do 654321', 'Håkan Eriksson',        'Ericsson', '0',    '2014-12-31', '2014-07-01', '654321', '72003800670'),
-('BRA', 'Texto do termo de compromisso da Microsoft', 'Carta de avaliação do 654321', 'Dave Campbell',         'Microsoft', '1',   '2015-12-31', '2015-07-01', '654321', '72003800670'),
-('BRA', 'Texto do termo de compromisso da EMBRAER', 'Carta de avaliação do 654321', 'Mauro Kern',            'EMBRAER',  '1',    '2016-06-30', '2016-01-01', 654321, '24174616256'),
-('BRA', 'Texto do termo de compromisso do Facebook', 'Carta de avaliação do 112358', 'Mike Schroepfer',       'Facebook', '1',    '2015-12-31', '2015-07-01', '112358', '11104385910'),
-('USA', 'Texto do termo de compromisso da Google', 'Carta de avaliação do 112358', 'Larry Page',            'Google',   '0',    '2016-06-30', '2016-01-01', '112358', '40078919665');
+('BRA', 'Texto do termo de compromisso do Facebook', 'Carta de avaliação do 112358', 'Mike Schroepfer', 'Facebook', '1', '2015-12-31', '2015-07-01', '112358', '11104385910'),
+('USA', 'Texto do termo de compromisso da Google', 'Carta de avaliação do 112358', 'Larry Page', 'Google',          '0', '2016-06-30', '2016-01-01', '112358', '40078919665'),
+('BRA', 'Texto do termo de compromisso da Oracle', 'Carta de avaliação do 123456', 'Larry Ellison', 'Oracle',       '1', '2013-06-30', '2013-01-01', '123456', '24174616256'),
+('FIN', 'Texto do termo de compromisso da Nokia', 'Carta de avaliação do 123456', 'Rich Green', 'Nokia',            '0', '2014-12-31', '2014-07-01', '123456', '24174616256'),
+('USA', 'Texto do termo de compromisso da IBM', 'Carta de avaliação do 123456', 'Mark Dean', 'IBM',                 '0', '2015-03-31', '2015-01-01', '123456', '11104385910'),
+('KOR', 'Texto do termo de compromisso da Samsung', 'Carta de avaliação do 123456', 'Omar Khan', 'Samsung',         '0', '2016-06-30', '2016-01-01', '123456', '24174616256'),
+('BRA', 'Texto do termo de compromisso da EMBRAER', 'Carta de avaliação do 334578', 'Mauro Kern', 'Embraer',        '1', '2016-06-30', '2016-01-01', '334578', '24174616256'),
+('SWE', 'Texto do termo de compromisso da Ericsson', 'Carta de avaliação do 654321', 'Håkan Eriksson', 'Ericsson',  '0', '2014-12-31', '2014-07-01', '654321', '72003800670'),
+('BRA', 'Texto do termo de compromisso da Microsoft', 'Carta de avaliação do 654321', 'Dave Campbell', 'Microsoft', '0', '2015-12-31', '2015-07-01', '654321', '72003800670'),
+('BRA', 'Texto do termo de compromisso da EMBRAER', 'Carta de avaliação do 654321', 'Mauro Kern', 'Embraer',        '1', '2016-06-30', '2016-01-01', '654321', '24174616256');
 
 
 -- ----------------------------------------------------------------------------
