@@ -5,7 +5,8 @@ USE siga;
 -- ----------------------------------------------------------------------------
 -- Pessoa
 -- Criado por: Grupo 6A
--- Tambem precisa popular as tabelas Endereço e E-mail
+-- TODO: popular as tabelas Endereço e E-mail
+-- TODO: criar TAs
 
 DROP TABLE IF EXISTS tbl_pessoa;
 CREATE TABLE IF NOT EXISTS tbl_pessoa
@@ -78,7 +79,7 @@ VALUES
 -- ----------------------------------------------------------------------------
 -- Docente
 -- Criado por: Grupo 6A
--- Modificar os outros campos, mas manter os CPFs!
+-- TODO: modificar os outros campos, mas manter os CPFs!
 
 DROP TABLE IF EXISTS tbl_docente;
 CREATE TABLE tbl_docente
@@ -365,7 +366,7 @@ INSERT INTO tbl_Tecnico_Administrativo(id) VALUES
 ('24174616256');
 
 -- ----------------------------------------------------------------------------
--- Calendario
+-- Calendário
 -- Criado por: Grupo 6A
 
 DROP TABLE IF EXISTS tbl_calendario;
@@ -451,7 +452,7 @@ INSERT INTO tbl_Conselho (sigla, tipo, dataInicioVigencia, dataFimVigencia) VALU
 
 -- ----------------------------------------------------------------------------
 -- Estágio
--- Criado por: Julio Batista (5A)
+-- Criado por: Julio Batista Silva (5A)
 
 DROP TABLE IF EXISTS tbl_estagio;
 CREATE TABLE IF NOT EXISTS tbl_estagio
@@ -483,7 +484,7 @@ AS
 
 
 -- View que mostra quantos estudantes estão atualmente empregados em cada empresa
-DROP view IF EXISTS v_estagio_empresas;
+DROP VIEW IF EXISTS v_estagio_empresas;
 CREATE OR REPLACE view v_estagio_empresas
 AS
   SELECT empresa  AS empresa,
@@ -494,8 +495,7 @@ AS
 
 
 -- View que mostra onde e quando cada aluno (exibido por nome) fez o estágio obrigatório
-DROP view IF EXISTS v_estagio_obrigatorio;
-
+DROP VIEW IF EXISTS v_estagio_obrigatorio;
 CREATE OR REPLACE view v_estagio_obrigatorio
 AS
   SELECT p.prenome      AS prenome,
@@ -509,6 +509,44 @@ AS
   WHERE  e.obrigatorio = 1
          AND e.estudante_ra = a.ra
          AND a.pessoa_id = p.pessoa_id; 
+
+
+-- View equivalente à tbl_estágio usando nomes em vez de RA e CPF
+DROP VIEW IF EXISTS v_estagio_nomes;
+CREATE OR REPLACE VIEW v_estagio_nomes
+AS
+  SELECT pa.prenome     AS estudante_prenome,
+         pa.sobrenome   AS estudante_sobrenome,
+         pd.prenome     AS docente_prenome,
+         pd.sobrenome   AS docente_sobrenome,
+         e.empresa      AS empresa,
+         e.pais_atuacao AS pais,
+         e.data_inicio  AS inicio,
+         e.data_termino AS termino
+  FROM   tbl_estagio AS e
+         JOIN tbl_estudante AS a
+           ON a.ra = e.estudante_ra
+         JOIN tbl_pessoa AS pa
+           ON pa.pessoa_id = a.pessoa_id
+         JOIN tbl_docente AS d
+           ON d.pessoa = e.supervisor_id
+         JOIN tbl_pessoa AS pd
+           ON pd.pessoa_id = d.pessoa;
+
+
+-- View com alunos que ainda não fizeram o estágio obrigatório
+DROP VIEW IF EXISTS v_estagio_pendente;
+CREATE OR replace VIEW v_estagio_pendente
+AS
+  SELECT a.ra        AS ra,
+         p.prenome   AS prenome,
+         p.sobrenome AS sobrenome
+  FROM   tbl_estudante AS a
+         inner join tbl_pessoa AS p
+                 ON p.pessoa_id = a.pessoa_id
+  WHERE  NOT EXISTS (SELECT *
+                     FROM   tbl_estagio AS e
+                     WHERE  e.estudante_ra = a.ra); 
 
 
 INSERT INTO tbl_estagio (pais_atuacao, termo_compromisso, carta_avaliacao, supervisor_empresa, empresa, obrigatorio, data_termino, data_inicio, estudante_ra, supervisor_id) VALUES
