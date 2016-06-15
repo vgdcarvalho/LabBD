@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS tbl_email
      email  VARCHAR(60),
      CONSTRAINT pk_email PRIMARY KEY (pessoa, email),
      CONSTRAINT email_fk_pessoa FOREIGN KEY (pessoa) REFERENCES tbl_pessoa (pessoa_id)
-  ); 
+  );
 
 
 DROP TABLE IF EXISTS tbl_endereco;
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS tbl_endereco
      tipo_end        VARCHAR(30),
      CONSTRAINT pk_endereco PRIMARY KEY (pessoa, cep_end),
      CONSTRAINT end_fk_pessoa FOREIGN KEY (pessoa) REFERENCES tbl_pessoa (pessoa_id)
-  ); 
+  );
 
 
 INSERT INTO tbl_pessoa (pessoa_id, prenome, sobrenome, raca, sexo, cidade_nasc, pais_nasc, UF_nasc, data_nasc, pai_filiacao, mae_filiacao)
@@ -104,7 +104,7 @@ CREATE TABLE tbl_carga_horaria
      horas_aula       INT,
      CONSTRAINT pk_carga PRIMARY KEY (pessoa, semestre_inicio),
      CONSTRAINT carga_fk_pessoa FOREIGN KEY (pessoa) REFERENCES tbl_pessoa (pessoa_id)
-  ); 
+  );
 
 
 INSERT INTO tbl_docente (pessoa, titularidade, alivio_integral) VALUES
@@ -146,7 +146,7 @@ CREATE TABLE tbl_reuniao
      numero INT(5) NOT NULL,
      data   DATE NOT NULL,
      CONSTRAINT reuniao_pk PRIMARY KEY (numero)
-  ); 
+  );
 
 
 -- ----------------------------------------------------------------------------
@@ -167,7 +167,7 @@ CREATE TABLE tbl_ata
      resumo         VARCHAR(256) NOT NULL,
      CONSTRAINT ata_pk PRIMARY KEY (numero_reuniao),
      CONSTRAINT ata_fk_reuniao FOREIGN KEY (numero_reuniao) REFERENCES tbl_reuniao (numero)
-  ); 
+  );
 
 -- ----------------------------------------------------------------------------
 -- Contribuição
@@ -206,7 +206,7 @@ CREATE TABLE tbl_participa
      CONSTRAINT participa_pk PRIMARY KEY (id, numero_reuniao),
      CONSTRAINT part_fk_reuniao FOREIGN KEY (numero_reuniao) REFERENCES tbl_reuniao (numero),
      CONSTRAINT part_fk_membro FOREIGN KEY (id) REFERENCES tbl_membro (cpf)
-  ); 
+  );
 
 
 -- ----------------------------------------------------------------------------
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS tbl_estudante
      pessoa_id     VARCHAR(15) NOT NULL,
      CONSTRAINT fk_pessoa_id FOREIGN KEY (pessoa_id) REFERENCES tbl_pessoa (pessoa_id),
      CONSTRAINT estudante_pk PRIMARY KEY (ra)
-  ); 
+  );
 
 INSERT INTO tbl_estudante (ra, ensino_medio, ano_conclusao, pessoa_id) VALUES
 (524896, "Escola Primaria Carlos Gomes", 2012, '90778718530'),
@@ -256,7 +256,7 @@ AS
   SELECT tipo AS tipo,
          Count(*)     AS qtd_ativ
   FROM   tbl_atividade_complementar
-  GROUP  BY tipo; 
+  GROUP  BY tipo;
 
 
 -- View para exibição de qual atividade cada aluno realiza
@@ -267,13 +267,13 @@ AS
          e.ra
   FROM   tbl_atividade_complementar AS a,
          tbl_estudante AS e
-  WHERE  a.ra_ativ = e.ra; 
+  WHERE  a.ra_ativ = e.ra;
 
 INSERT INTO tbl_atividade_complementar(tipo, descricao, carga_horaria, id, ra_ativ) VALUES
-("Empresa Júnior", "Empresa ambientada no contexto universitário", 60, 100, 524896), 
-("Atlética", "Organização que visa eventos de integração entre os alunos", 40, 200, 425169), 
-("DCE", "Diretório Central dos Estudantes. Órgão para representação dos estudantes", 60, 300, 334578), 
-("PET", "Programa de Ensino Tutorial. Desenvolvimento de projetos com auxílio de bolsa e supervisionado", 60, 400, 123456), 
+("Empresa Júnior", "Empresa ambientada no contexto universitário", 60, 100, 524896),
+("Atlética", "Organização que visa eventos de integração entre os alunos", 40, 200, 425169),
+("DCE", "Diretório Central dos Estudantes. Órgão para representação dos estudantes", 60, 300, 334578),
+("PET", "Programa de Ensino Tutorial. Desenvolvimento de projetos com auxílio de bolsa e supervisionado", 60, 400, 123456),
 ("IC", "Iniciação Científica. Desenvolvimento de projeto com auxílio ou não de bolsa", 60, 500, 654321);
 
 
@@ -289,7 +289,7 @@ CREATE TABLE IF NOT EXISTS tbl_departamento
      nome   VARCHAR(50) NOT NULL,
      sigla  VARCHAR(10) NOT NULL,
      PRIMARY KEY (sigla)
-  ); 
+  );
 
 
 -- View que conta o numero de departamentos
@@ -299,22 +299,22 @@ AS
   SELECT nome     AS nome,
          Count(*) AS qtd_depart
   FROM   tbl_departamento
-  GROUP  BY nome; 
+  GROUP  BY nome;
 
 
--- View que exibe cada departamento com seu respectivo capus e centro
+-- View que exibe cada departamento com seu respectivo campus e centro
 DROP view IF EXISTS v_departamentos;
 CREATE OR REPLACE view v_departamentos
 AS
   SELECT nome, campi, sigla, centro
   FROM   tbl_departamento;
-  
+
 
 INSERT INTO tbl_departamento(centro, campi, nome, sigla) VALUES
-("CCET", "São Carlos", "Departamento de Computação", "DC"), 
-("CCET", "Sorocaba", "Departamento de Computação", "DComp"), 
-("CCA", "Araras", "Desenvolvimento Rural", "DDR"), 
-("CCET", "São Carlos", "Departamento de Matemática", "DM"), 
+("CCET", "São Carlos", "Departamento de Computação", "DC"),
+("CCET", "Sorocaba", "Departamento de Computação", "DComp"),
+("CCA", "Araras", "Desenvolvimento Rural", "DDR"),
+("CCET", "São Carlos", "Departamento de Matemática", "DM"),
 ("CCET", "São Carlos", "Departamento de Física", "DF");
 
 
@@ -335,7 +335,7 @@ CREATE TABLE IF NOT EXISTS tbl_disciplina
      CONSTRAINT fk_depto_disc FOREIGN KEY (departamento) REFERENCES tbl_departamento (sigla),
      CONSTRAINT fk_atcomp_disc FOREIGN KEY (idatividadecomplementar) REFERENCES tbl_atividade_complementar (id),
      CONSTRAINT pk_disc PRIMARY KEY (codigo)
-  ); 
+  );
 
 INSERT INTO tbl_Disciplina (codigo, nome, ementa, creditosTeoricos, creditosPraticos, departamento) VALUES
 ('02.522-4', 'Laboratorio de Banco de Dados', '', 0, 2, 'DC'),
@@ -359,7 +359,7 @@ CREATE TABLE tbl_tecnico_administrativo
      id VARCHAR(15) NOT NULL,
      CONSTRAINT tecnico_pk PRIMARY KEY (id),
      CONSTRAINT tecnico_fk_id FOREIGN KEY (id) REFERENCES tbl_pessoa (pessoa_id)
-  ); 
+  );
 
 
 INSERT INTO tbl_Tecnico_Administrativo(id) VALUES
@@ -377,25 +377,25 @@ CREATE TABLE IF NOT EXISTS tbl_calendario (
     data_ini DATE,
     data_ter DATE,
     CONSTRAINT pk_calendario PRIMARY KEY (ano , semestre)
-); 
+);
 
 
-DROP VIEW IF EXISTS `v_calendario`;
+DROP VIEW IF EXISTS v_calendario;
 CREATE VIEW v_calendario AS
-    SELECT 
+    SELECT
         tbl_calendario.ano AS ano,
         tbl_calendario.semestre AS semestre,
         DATE_FORMAT(tbl_calendario.data_ini, '%d-%c-%Y') AS data_ini,
         DATE_FORMAT(tbl_calendario.data_ter, '%d-%c-%Y') AS data_ter
     FROM
-        tbl_calendario; 
+        tbl_calendario;
 
 
 INSERT INTO tbl_calendario(ano, semestre, tipo, data_ini, data_ter) VALUES
-(2016, 1, "Acadêmico", '2016-02-01', '2016-07-30'), 
-(2016, 2, "Acadêmico", '2016-08-01', '2016-12-15'), 
-(2017, 1, "Acadêmico", '2017-02-01', '2017-07-30'), 
-(2017, 2, "Acadêmico", '2017-08-01', '2017-12-15'), 
+(2016, 1, "Acadêmico", '2016-02-01', '2016-07-30'),
+(2016, 2, "Acadêmico", '2016-08-01', '2016-12-15'),
+(2017, 1, "Acadêmico", '2017-02-01', '2017-07-30'),
+(2017, 2, "Acadêmico", '2017-08-01', '2017-12-15'),
 (2018, 1, "Acadêmico", '2018-02-01', '2018-07-30');
 
 
@@ -416,7 +416,7 @@ CREATE TABLE IF NOT EXISTS tbl_turma
      CONSTRAINT turma_fk_calendario FOREIGN KEY (ano, semestre) REFERENCES tbl_calendario (ano, semestre),
      CONSTRAINT fk_turma_codigodisciplina FOREIGN KEY (codigodisciplina) REFERENCES tbl_disciplina (codigo),
      CONSTRAINT pk_turma PRIMARY KEY (codigodisciplina, codigoturma, semestre, ano)
-  ); 
+  );
 
 INSERT INTO tbl_turma (semestre, ano, codigoTurma, codigoDisciplina, numeroDeVagas, horario, dia) VALUES
 (1, 2016, 'A', '02.522-4', 25, '14:00', 'terca-feira'),
@@ -442,7 +442,7 @@ CREATE TABLE tbl_conselho
      datainiciovigencia DATE NOT NULL,
      datafimvigencia    DATE NOT NULL,
      CONSTRAINT conselho_pk PRIMARY KEY (datainiciovigencia, datafimvigencia)
-  ); 
+  );
 
 INSERT INTO tbl_Conselho (sigla, tipo, dataInicioVigencia, dataFimVigencia) VALUES
 ('CoG', 'Graduação', '1998-01-31', '2016-12-31'),
@@ -470,7 +470,7 @@ CREATE TABLE IF NOT EXISTS tbl_estagio
      CONSTRAINT pk_estagio PRIMARY KEY (data_inicio, estudante_ra, supervisor_id),
      CONSTRAINT estagio_fk_estudante FOREIGN KEY (estudante_ra) REFERENCES tbl_estudante (ra),
      CONSTRAINT estagio_fk_supervisor FOREIGN KEY (supervisor_id) REFERENCES tbl_docente (pessoa)
-  ); 
+  );
 
 
 -- View que mostra quantos estágios foram feitos em cada país
@@ -491,7 +491,7 @@ AS
          Count(*) AS qtd_estudantes
   FROM   tbl_estagio
   WHERE  data_termino >= Curdate()
-  GROUP  BY empresa; 
+  GROUP  BY empresa;
 
 
 -- View que mostra onde e quando cada aluno (exibido por nome) fez o estágio obrigatório
@@ -508,12 +508,12 @@ AS
          tbl_pessoa AS p
   WHERE  e.obrigatorio = 1
          AND e.estudante_ra = a.ra
-         AND a.pessoa_id = p.pessoa_id; 
+         AND a.pessoa_id = p.pessoa_id;
 
 
 -- View equivalente à tbl_estágio usando nomes em vez de RA e CPF
 DROP VIEW IF EXISTS v_estagio_nomes;
-CREATE OR REPLACE VIEW v_estagio_nomes
+CREATE OR REPLACE view v_estagio_nomes
 AS
   SELECT pa.prenome     AS estudante_prenome,
          pa.sobrenome   AS estudante_sobrenome,
@@ -521,6 +521,7 @@ AS
          pd.sobrenome   AS docente_sobrenome,
          e.empresa      AS empresa,
          e.pais_atuacao AS pais,
+         e.obrigatorio  AS obrigatorio,
          e.data_inicio  AS inicio,
          e.data_termino AS termino
   FROM   tbl_estagio AS e
@@ -546,7 +547,7 @@ AS
                  ON p.pessoa_id = a.pessoa_id
   WHERE  NOT EXISTS (SELECT *
                      FROM   tbl_estagio AS e
-                     WHERE  e.estudante_ra = a.ra); 
+                     WHERE  e.estudante_ra = a.ra);
 
 
 INSERT INTO tbl_estagio (pais_atuacao, termo_compromisso, carta_avaliacao, supervisor_empresa, empresa, obrigatorio, data_termino, data_inicio, estudante_ra, supervisor_id) VALUES
@@ -703,7 +704,7 @@ CREATE TABLE IF NOT EXISTS tbl_sala (
     CONSTRAINT pk_sala PRIMARY KEY (numero , predio),
     CONSTRAINT sala_fk_predio FOREIGN KEY (predio)
         REFERENCES tbl_predio (sigla)
-);  
+);
 
 
 DROP view IF EXISTS v_salas_com_grande_capacidade;
@@ -729,8 +730,8 @@ WHERE capacidade_de_alunos <= 30;
 
 INSERT INTO tbl_sala (numero,predio,tipo,recursos,caracteristicas,capacidade_de_alunos) VALUES
 (297,"at-1","aula teorica","55 carteiras. 1 projetor.","sala grande e com ar condicionado",55),
-(200,"at-1","aula teorica","70 carteiras.","sala grande e com ventilador",70); 
- 
+(200,"at-1","aula teorica","70 carteiras.","sala grande e com ventilador",70);
+
 
 -- ----------------------------------------------------------------------------
 -- Alocação
@@ -813,10 +814,10 @@ CREATE TABLE IF NOT EXISTS tbl_proposta_int (
 );
 
 INSERT INTO tbl_proposta_int(ano, semestre, data_submissao) VALUES
-(2016, 1, '2016-07-30'), 
-(2016, 2, '2016-12-15'), 
-(2017, 1, '2017-07-30'), 
-(2017, 2, '2017-12-15'), 
+(2016, 1, '2016-07-30'),
+(2016, 2, '2016-12-15'),
+(2017, 1, '2017-07-30'),
+(2017, 2, '2017-12-15'),
 (2018, 1, '2018-07-30');
 
 
@@ -892,4 +893,4 @@ AS
   FROM   tbl_estudante,
          tbl_matricula
   WHERE  tbl_estudante.ra = tbl_matricula.ra
-  GROUP  BY pessoa_id; 
+  GROUP  BY pessoa_id;
