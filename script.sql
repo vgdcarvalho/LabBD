@@ -921,14 +921,13 @@ VALUES
 -- Procedure que verifica a duração de um semestre academico
 -- Exemplo: CALL pr_periodo_academico(2016, 2);
 
-
 DROP PROCEDURE IF EXISTS pr_periodo_academico;
 delimiter $$
-CREATE PROCEDURE pr_periodo_academico( IN ano_p INT,
-                                IN semestre_p INT)
+CREATE PROCEDURE pr_periodo_academico(	IN ano_p 		INT,
+                                		IN semestre_p 	INT)
 BEGIN
-DECLARE inicio DATE;
-DECLARE fim DATE;
+DECLARE inicio 	DATE;
+DECLARE fim 	DATE;
   SET inicio = (SELECT data_ini FROM tbl_calendario WHERE ano = ano_p AND semestre = semestre_p);
   SET fim = (SELECT data_ter FROM tbl_calendario WHERE ano = ano_p AND semestre = semestre_p);
   SELECT data_ini, data_ter FROM tbl_calendario WHERE data_ini = inicio AND data_ter = fim AND tipo = 'Acadêmico';
@@ -937,7 +936,7 @@ delimiter ;
 
 -- ----------------------------------------------------------
 -- Função que retorna a data de submissao de uma proposta intermediária, dado seu ano e semestre
--- Exemplo: SELECT * FROM tbl_proposta_int WHERE fn_datasub_propint (2016, 2);
+-- Exemplo: SELECT * FROM tbl_proposta_int WHERE data_submissao = fn_datasub_propint (2016, 2);
 DROP FUNCTION IF EXISTS fn_datasub_propint;
 delimiter $$
 CREATE FUNCTION fn_datasub_propint(	ano_p INT,
