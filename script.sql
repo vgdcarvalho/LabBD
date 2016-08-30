@@ -894,3 +894,21 @@ AS
          tbl_matricula
   WHERE  tbl_estudante.ra = tbl_matricula.ra
   GROUP  BY pessoa_id;
+
+-- ----------------------------------------------------------------------------
+-- Recesso
+-- Criado por: Grupo 6A  
+
+DROP TABLE IF EXISTS tbl_recesso;
+CREATE TABLE IF NOT EXISTS tbl_recesso (
+    id INT NOT NULL,
+    tipo VARCHAR(10),
+    data_ini DATE,
+    data_ter DATE,
+    CONSTRAINT pk_recesso PRIMARY KEY (id)
+);
+
+INSERT INTO tbl_recesso (id, tipo, data_ini, data_ter)
+VALUES
+(0000, 'Acadêmico', '2016-12-15', '2017-02-01'),
+(0001, 'Acadêmico', '2017-12-15', '2018-02-01');

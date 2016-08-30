@@ -32,4 +32,4 @@
 - Prédio(Raphael Henrique)
 - Sala (Henrique Savelli)
 - Atividade (Gabriel Palomino)
-- Calendário (Vinícius Carvalho)
+- Calendário (Vinicius Carvalho)
